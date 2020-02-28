@@ -78,4 +78,5 @@ public class MessageConstant {
     public static final String GET_CHECKITEMANDCHECKGROUPERROR = "当前检查项与检查组存在关联关系,不能删除!";
     public static final String GET_CHECKGROUPANDCHECKITEMERROR = "当前检查组与检查项存在关联关系,不能删除!";
     public static final String GET_CHECKITEMANDSETMEALERROR = "当前检查组与套餐存在关联关系,不能删除!";
+    public static final String GET_SETMEALANDCHECKITEMERROR = "当前套餐与检查组存在关联关系,不能删除!";
 }

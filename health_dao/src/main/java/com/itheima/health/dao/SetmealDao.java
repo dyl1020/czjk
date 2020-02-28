@@ -35,4 +35,9 @@ public interface SetmealDao {
     //更新t_setmeal
     void edit(Setmeal setmeal);
     void deleteAssociation(Integer id);
+
+    // 使用套餐id，删除套餐和检查组中间表数据
+    Long findSetmealAndCheckGroupCountBySetmealId(Integer id);
+    //使用套餐id,删除套餐表中数据
+    void delete(Integer id);
 }

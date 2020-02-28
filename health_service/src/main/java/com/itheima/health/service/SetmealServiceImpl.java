@@ -111,4 +111,27 @@ public class SetmealServiceImpl implements SetmealService {
         //更新套餐基本信息
         setmealDao.edit(setmeal);
     }
+
+    //删除套餐
+    @Override
+    public void delete(Integer id) {
+        // 使用套餐id，查询数据库对应的套餐，获取数据库存放的img
+        Setmeal setmeal_img = setmealDao.findById(id);
+        // 使用套餐id，查询套餐和检查组中间表
+        Long count = setmealDao.findSetmealAndCheckGroupCountBySetmealId(id);
+        // 存在数据 抛出运行时异常
+        if (count>0){
+            throw new RuntimeException(MessageConstant.GET_SETMEALANDCHECKITEMERROR);
+        }
+        // 删除套餐
+        setmealDao.delete(id);
+        // 获取存放的图片信息
+        String img = setmeal_img.getImg();
+        // 需要先删除七牛云之前数据库的图片
+        if (img!=null && !"".equals(img)){
+            QiniuUtils.deleteFileFromQiniu(img);
+        }
+    }
+
+
 }
