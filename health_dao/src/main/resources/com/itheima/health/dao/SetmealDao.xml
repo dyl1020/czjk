@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.health.dao.SetmealDao">
+
+    <!--新增套餐
+    <insert id="add" parameterType="setmeal">
+        &lt;!&ndash;返回套餐id&ndash;&gt;
+        <selectKey resultType="int" order="AFTER" keyProperty="id">
+            select last_insert_id()
+        </selectKey>
+        insert into t_setmeal (name, code, helpCode, sex, age, price, remark, attention, img) values (#{name},#{code},#{helpCode},#{sex},#{age},#{price},#{remark},#{attention},#{img} )
+    </insert>
+    &lt;!&ndash;保存中间表数据&ndash;&gt;
+    <insert id="addSetmealAndCheckGroup" parameterType="hashmap">
+        insert into t_setmeal_checkgroup (setmeal_id,checkgroup_id) values (#{setmealid},#{checkgroupIds})
+    </insert>-->
+
+    <!--保存套餐，返回套餐id-->
+    <insert id="add" parameterType="setmeal">
+        <selectKey resultType="int" order="AFTER" keyProperty="id">
+            select last_insert_id()
+        </selectKey>
+        insert into t_setmeal(name,code,helpCode,sex,age,price,remark,attention,img) values(#{name},#{code},#{helpCode},#{sex},#{age},#{price},#{remark},#{attention},#{img})
+    </insert>
+    <!--保存套餐和检查组的中间表-->
+    <insert id="addSetmealAndCheckGroup" parameterType="map">
+        insert into t_setmeal_checkgroup(setmeal_id,checkgroup_id) values(#{setmealId},#{checkGroupId})
+    </insert>
+
+    <!--分页条件查询-->
+    <select id="findPage" parameterType="string" resultType="setmeal">
+        select * from t_setmeal
+        <if test="value!=null and value.length>0">
+            where code = #{value} or name like concat('%',#{value},'%') or helpCode = #{value}
+        </if>
+    </select>
+
+    <!--使用套餐id查询套餐数据-->
+    <select id="findById" parameterType="int" resultType="setmeal">
+        select * from t_setmeal where id = #{id}
+    </select>
+    <!--查询套餐对应的检查项集合-->
+    <select id="findCheckGroupIdBySetmealId" parameterType="int" resultType="int">
+        select checkgroup_id from t_setmeal_checkgroup where setmeal_id = #{setmealId}
+    </select>
+    <!--更新t_setmeal-->
+    <update id="edit" parameterType="setmeal">
+        update t_setmeal
+        <set>
+            <if test="name!=null and name.length>0">
+                name = #{name},
+            </if>
+            <if test="code!=null and code.length>0">
+                code = #{code},
+            </if>
+            <if test="helpCode!=null and helpCode.length>0">
+                helpCode = #{helpCode},
+            </if>
+            <if test="sex!=null and sex.length>0">
+                sex = #{sex},
+            </if>
+            <if test="age!=null and age.length>0">
+                age = #{age},
+            </if>
+            <if test="price!=null ">
+                price = #{price},
+            </if>
+            <if test="remark!=null and remark.length>0">
+                remark = #{remark},
+            </if>
+            <if test="attention!=null and attention.length>0">
+                attention = #{attention},
+            </if>
+            <if test="img!=null and img.length>0">
+                img = #{img}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--使用套餐id 删除中间表数据-->
+    <delete id="deleteAssociation" parameterType="int">
+        delete from t_setmeal_checkgroup where setmeal_id = #{id}
+    </delete>
+</mapper>
+
